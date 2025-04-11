@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
-import InventoryList from "../components/InventoryList/InventoryList.vue";
-import InventoryForm from "../components/InventoryForm/InventoryForm.vue";
+import InventoryList from "../pages/InventoryList/InventoryList.vue";
+import InventoryForm from "../pages/InventoryForm/InventoryForm.vue";
 
 const routes = [
   { path: "/", name: "InventoryList", component: InventoryList },

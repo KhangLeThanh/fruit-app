@@ -1,27 +1,50 @@
 <template>
-  <div>
-    <h1>{{ isEditMode ? "Edit Item" : "Add Item" }}</h1>
-    <form @submit.prevent="handleSubmit">
-      <div>
-        <label for="name">Inventory Name:</label>
-        <input id="name" v-model="name" placeholder="Enter item name" />
-        <div v-if="errors.name" class="error-message">
+  <div class="container">
+    <button @click="goBack" class="btn btn-secondary mb-3">Back</button>
+
+    <h1 class="text-center mb-4">
+      {{ isEditMode ? "Edit Item" : "Add Item" }}
+    </h1>
+    <form
+      @submit.prevent="handleSubmit"
+      class="mx-auto"
+      style="max-width: 500px"
+    >
+      <div class="mb-3">
+        <label for="name" class="form-label text-start d-block"
+          >Inventory Name:</label
+        >
+        <input
+          id="name"
+          v-model="name"
+          type="text"
+          class="form-control"
+          placeholder="Enter item name"
+        />
+        <div v-if="errors.name" class="error-message text-danger mt-1">
           {{ errors.name }}
         </div>
       </div>
-      <div>
-        <label for="quantity">Quantity:</label>
+
+      <div class="mb-3">
+        <label for="quantity" class="form-label text-start d-block"
+          >Quantity:</label
+        >
         <input
           id="quantity"
           type="number"
           v-model.number="quantity"
+          class="form-control"
           :disabled="!isEditMode"
         />
-        <div v-if="errors.quantity" class="error-message">
+        <div v-if="errors.quantity" class="error-message text-danger mt-1">
           {{ errors.quantity }}
         </div>
       </div>
-      <button type="submit">{{ isEditMode ? "Update" : "Add" }}</button>
+
+      <button type="submit" class="btn btn-primary w-100">
+        {{ isEditMode ? "Update" : "Add" }}
+      </button>
     </form>
   </div>
 </template>
@@ -63,6 +86,9 @@ export default defineComponent({
         }
       }
     });
+    const goBack = () => {
+      router.push("/");
+    };
     const validateForm = async () => {
       try {
         errors.value = { name: "", quantity: "" };
@@ -83,6 +109,7 @@ export default defineComponent({
         return false;
       }
     };
+
     const handleSubmit = async () => {
       const isValid = await validateForm();
       if (!isValid) return;
@@ -104,7 +131,16 @@ export default defineComponent({
       isEditMode,
       handleSubmit,
       errors,
+      goBack,
     };
   },
 });
 </script>
+
+<style scoped>
+/* Optional custom styles for error messages */
+.error-message {
+  font-size: 0.875rem;
+  color: #dc3545;
+}
+</style>

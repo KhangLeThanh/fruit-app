@@ -1,0 +1,22 @@
+.btn {
+  font-weight: 600;
+}
+.btn-primary {
+  background-color: #23282d !important;
+  border: 2px solid #23282d !important;
+}
+
+.btn-primary:hover {
+  background-color: transparent !important;
+  color: #23282d !important;
+}
+
+.btn-secondary {
+  background-color: #69d1cc !important;
+  border: 2px solid #69d1cc !important;
+}
+
+.btn-secondary:hover {
+  background-color: transparent !important;
+  color: #23282d !important;
+}
