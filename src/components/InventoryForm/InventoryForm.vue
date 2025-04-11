@@ -3,10 +3,10 @@
     <h1>{{ isEditMode ? "Edit Item" : "Add Item" }}</h1>
     <form @submit.prevent="handleSubmit">
       <div>
-        <label for="name">Item Name:</label>
-        <input id="name" v-model="itemName" placeholder="Enter item name" />
-        <div v-if="errors.itemName" class="error-message">
-          {{ errors.itemName }}
+        <label for="name">Inventory Name:</label>
+        <input id="name" v-model="name" placeholder="Enter item name" />
+        <div v-if="errors.name" class="error-message">
+          {{ errors.name }}
         </div>
       </div>
       <div>
@@ -14,11 +14,11 @@
         <input
           id="quantity"
           type="number"
-          v-model.number="itemQuantity"
+          v-model.number="quantity"
           :disabled="!isEditMode"
         />
-        <div v-if="errors.itemQuantity" class="error-message">
-          {{ errors.itemQuantity }}
+        <div v-if="errors.quantity" class="error-message">
+          {{ errors.quantity }}
         </div>
       </div>
       <button type="submit">{{ isEditMode ? "Update" : "Add" }}</button>
@@ -29,7 +29,8 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { validationSchema } from "../../services/validationSchema"; // Import your schema
+import { validationSchema } from "../../services/validationSchema";
+import { ValidationError } from "yup";
 import useInventory from "../../composables/useInventory";
 
 export default defineComponent({
@@ -40,21 +41,23 @@ export default defineComponent({
     const { handleAddItem, handleEditItem, fetchOneInventory } = useInventory();
 
     const isEditMode = ref(false);
-    const itemId = ref<string | null>(null);
-    const itemName = ref("");
-    const itemQuantity = ref(0);
+    const inventoryId = ref<string>("");
+    const name = ref("");
+    const quantity = ref(0);
     const errors = ref({
-      itemName: "",
-      itemQuantity: "",
+      name: "",
+      quantity: "",
     });
     onMounted(async () => {
-      if (route.params.id) {
+      const routeId = route.params.id;
+
+      if (routeId && typeof routeId === "string") {
         isEditMode.value = true;
-        itemId.value = route.params.id;
-        const item = await fetchOneInventory(itemId.value);
+        inventoryId.value = routeId;
+        const item = await fetchOneInventory(routeId);
         if (item) {
-          itemName.value = item.name;
-          itemQuantity.value = item.quantity;
+          name.value = item.name;
+          quantity.value = item.quantity;
         } else {
           console.error("Item not found!");
         }
@@ -62,37 +65,42 @@ export default defineComponent({
     });
     const validateForm = async () => {
       try {
-        errors.value = { itemName: "", itemQuantity: "" };
+        errors.value = { name: "", quantity: "" };
         await validationSchema.validate(
-          { itemName: itemName.value, itemQuantity: itemQuantity.value },
+          { name: name.value, quantity: quantity.value },
           { abortEarly: false }
         );
         return true;
       } catch (err) {
-        err.inner.forEach((error) => {
-          errors.value[error.path as keyof typeof errors.value] = error.message;
-        });
+        if (err instanceof ValidationError) {
+          err.inner.forEach((error) => {
+            errors.value[error.path as keyof typeof errors.value] =
+              error.message;
+          });
+        } else {
+          console.error("Unexpected error:", err);
+        }
         return false;
       }
     };
     const handleSubmit = async () => {
       const isValid = await validateForm();
       if (!isValid) return;
-      if (isEditMode.value && itemId.value !== null) {
+      if (isEditMode.value && inventoryId.value !== null) {
         await handleEditItem(
-          Number(itemId.value),
-          itemQuantity.value,
-          itemName.value
+          Number(inventoryId.value),
+          quantity.value,
+          name.value
         );
       } else {
-        await handleAddItem(itemName.value);
+        await handleAddItem(name.value);
       }
       router.push("/");
     };
 
     return {
-      itemName,
-      itemQuantity,
+      name,
+      quantity,
       isEditMode,
       handleSubmit,
       errors,

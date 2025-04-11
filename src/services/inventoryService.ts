@@ -18,7 +18,7 @@ export const addItem = async (name: string): Promise<InventoryItem> => {
   return response.json();
 };
 
-export const getOneInventory = async (id: string): Promise<InventoryItem[]> => {
+export const getOneInventory = async (id: string): Promise<InventoryItem> => {
   const response = await fetch(`${API_URL}/${id}`);
   return response.json();
 };
