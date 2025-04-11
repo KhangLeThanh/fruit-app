@@ -19,9 +19,10 @@
           v-model="name"
           type="text"
           class="form-control"
+          :class="{ 'is-invalid': errors.name }"
           placeholder="Enter item name"
         />
-        <div v-if="errors.name" class="error-message text-danger mt-1">
+        <div v-if="errors.name" class="invalid-feedback text-start">
           {{ errors.name }}
         </div>
       </div>
@@ -35,9 +36,10 @@
           type="number"
           v-model.number="quantity"
           class="form-control"
+          :class="{ 'is-invalid': errors.quantity }"
           :disabled="!isEditMode"
         />
-        <div v-if="errors.quantity" class="error-message text-danger mt-1">
+        <div v-if="errors.quantity" class="invalid-feedback text-start">
           {{ errors.quantity }}
         </div>
       </div>
@@ -51,15 +53,20 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 import { validationSchema } from "../../services/validationSchema";
 import { ValidationError } from "yup";
 import useInventory from "../../composables/useInventory";
 
 export default defineComponent({
   name: "InventoryForm",
-  setup() {
-    const route = useRoute();
+  props: {
+    id: {
+      type: String,
+      required: false,
+    },
+  },
+  setup(props) {
     const router = useRouter();
     const { handleAddItem, handleEditItem, fetchOneInventory } = useInventory();
 
@@ -71,8 +78,9 @@ export default defineComponent({
       name: "",
       quantity: "",
     });
+
     onMounted(async () => {
-      const routeId = route.params.id;
+      const routeId = props.id;
 
       if (routeId && typeof routeId === "string") {
         isEditMode.value = true;
@@ -86,9 +94,11 @@ export default defineComponent({
         }
       }
     });
+
     const goBack = () => {
       router.push("/");
     };
+
     const validateForm = async () => {
       try {
         errors.value = { name: "", quantity: "" };
@@ -132,11 +142,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped>
-/* Optional custom styles for error messages */
-.error-message {
-  font-size: 0.875rem;
-  color: #dc3545;
-}
-</style>
