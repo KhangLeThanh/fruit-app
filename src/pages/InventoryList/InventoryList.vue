@@ -1,12 +1,10 @@
 <template>
   <div class="container">
-    <!-- Inventory Header Section -->
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h1 class="mb-0">Inventory</h1>
       <button class="btn btn-primary" @click="goToAddForm">Add New</button>
     </div>
 
-    <!-- Inventory List -->
     <ul class="list-group">
       <li
         v-for="item in inventory"
@@ -45,8 +43,8 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import useInventory from "../../composables/useInventory";
-import ConfirmationDialog from "../../components/ConfirmationDialog/ConfirmationDialog.vue"; // Import your ConfirmationDialog
+import useInventory from "@/composables/useInventory";
+import ConfirmationDialog from "@/components/ConfirmationDialog/ConfirmationDialog.vue"; // Import your ConfirmationDialog
 
 export default defineComponent({
   name: "InventoryList",

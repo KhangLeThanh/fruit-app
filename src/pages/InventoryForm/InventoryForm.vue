@@ -54,9 +54,10 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import { validationSchema } from "../../services/validationSchema";
+import { validationSchema } from "@/services/validationSchema";
+import { InventoryFormErrors } from "@/services/types";
 import { ValidationError } from "yup";
-import useInventory from "../../composables/useInventory";
+import useInventory from "@/composables/useInventory";
 
 export default defineComponent({
   name: "InventoryForm",
@@ -70,11 +71,11 @@ export default defineComponent({
     const router = useRouter();
     const { handleAddItem, handleEditItem, fetchOneInventory } = useInventory();
 
-    const isEditMode = ref(false);
+    const isEditMode = ref<boolean>(false);
     const inventoryId = ref<string>("");
-    const name = ref("");
-    const quantity = ref(0);
-    const errors = ref({
+    const name = ref<string>("");
+    const quantity = ref<number>(0);
+    const errors = ref<InventoryFormErrors>({
       name: "",
       quantity: "",
     });
