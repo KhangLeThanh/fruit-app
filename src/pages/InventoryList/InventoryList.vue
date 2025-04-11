@@ -57,7 +57,7 @@ export default defineComponent({
     const { inventory, fetchInventory, handleRemoveItem } = useInventory();
     const router = useRouter();
     const isDialog = ref(false); // Controls visibility of the modal
-    const itemIdToRemove = ref<number | null>(null);
+    const itemIdToRemove = ref<string | null>(null);
 
     onMounted(() => {
       fetchInventory();
@@ -67,11 +67,11 @@ export default defineComponent({
       router.push("/form");
     };
 
-    const goToEditForm = (id: number) => {
+    const goToEditForm = (id: string) => {
       router.push(`/form/${id}`);
     };
 
-    const showDeleteDialog = (id: number) => {
+    const showDeleteDialog = (id: string) => {
       itemIdToRemove.value = id;
       isDialog.value = true; // Show modal
     };

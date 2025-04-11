@@ -4,13 +4,12 @@ import {
   getInventory,
   addItem,
   removeItem,
-  updateItemQuantity,
+  updateItem,
   getOneInventory,
 } from "../services/inventoryService";
 
 export default function useInventory() {
   const inventory = ref<InventoryItem[]>([]);
-  const newItemName = ref("");
 
   const fetchInventory = async () => {
     inventory.value = await getInventory();
@@ -33,17 +32,16 @@ export default function useInventory() {
 
     return newItem;
   };
-  const handleRemoveItem = async (id: number) => {
+  const handleRemoveItem = async (id: string) => {
     await removeItem(id);
     await fetchInventory();
   };
-  const handleEditItem = async (id: number, quantity: number, name: string) => {
-    await updateItemQuantity(id, quantity, name);
+  const handleEditItem = async (id: string, quantity: number, name: string) => {
+    await updateItem(id, quantity, name);
     await fetchInventory();
   };
   return {
     inventory,
-    newItemName,
     fetchInventory,
     fetchOneInventory,
     handleAddItem,

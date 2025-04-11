@@ -23,12 +23,12 @@ export const getOneInventory = async (id: string): Promise<InventoryItem> => {
   return response.json();
 };
 
-export const removeItem = async (id: number): Promise<void> => {
+export const removeItem = async (id: string): Promise<void> => {
   await fetch(`${API_URL}/${id}`, { method: "DELETE" });
 };
 
-export const updateItemQuantity = async (
-  id: number,
+export const updateItem = async (
+  id: string,
   quantity: number,
   name: string
 ): Promise<InventoryItem> => {

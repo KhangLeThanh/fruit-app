@@ -114,11 +114,7 @@ export default defineComponent({
       const isValid = await validateForm();
       if (!isValid) return;
       if (isEditMode.value && inventoryId.value !== null) {
-        await handleEditItem(
-          Number(inventoryId.value),
-          quantity.value,
-          name.value
-        );
+        await handleEditItem(inventoryId.value, quantity.value, name.value);
       } else {
         await handleAddItem(name.value);
       }
