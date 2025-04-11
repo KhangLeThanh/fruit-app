@@ -124,7 +124,7 @@ export default defineComponent({
     const handleSubmit = async () => {
       const isValid = await validateForm();
       if (!isValid) return;
-      if (isEditMode.value && inventoryId.value !== null) {
+      if (isEditMode.value) {
         await handleEditItem(inventoryId.value, quantity.value, name.value);
       } else {
         await handleAddItem(name.value);

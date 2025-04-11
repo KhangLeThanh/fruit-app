@@ -54,7 +54,7 @@ export default defineComponent({
   setup() {
     const { inventory, fetchInventory, handleRemoveItem } = useInventory();
     const router = useRouter();
-    const isDialog = ref<boolean>(false); // Controls visibility of the modal
+    const isDialog = ref<boolean>(false);
     const itemIdToRemove = ref<string | null>(null);
 
     onMounted(() => {
