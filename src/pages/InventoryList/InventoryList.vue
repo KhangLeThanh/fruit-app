@@ -56,7 +56,7 @@ export default defineComponent({
   setup() {
     const { inventory, fetchInventory, handleRemoveItem } = useInventory();
     const router = useRouter();
-    const isDialog = ref(false); // Controls visibility of the modal
+    const isDialog = ref<boolean>(false); // Controls visibility of the modal
     const itemIdToRemove = ref<string | null>(null);
 
     onMounted(() => {
@@ -100,7 +100,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped>
-/* Optional styles for specific customizations */
-</style>
