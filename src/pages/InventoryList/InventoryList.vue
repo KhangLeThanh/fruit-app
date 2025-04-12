@@ -32,10 +32,10 @@
     <!-- Confirmation Dialog Modal -->
     <ConfirmationDialog
       :isVisible="isDialog"
+      @update:isVisible="isDialog = $event"
       :message="'Are you sure you want to delete?'"
       @confirm="removeItem"
       @cancel="onClose"
-      @update:isVisible="isDialog = $event"
     />
   </div>
 </template>
