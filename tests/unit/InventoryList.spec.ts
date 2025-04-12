@@ -5,12 +5,12 @@ import { createRouter, createMemoryHistory } from "vue-router";
 import { nextTick } from "vue";
 
 // Mocking useInventory composable
-jest.mock("../../src/composables/useInventory", () => ({
+jest.mock("@/composables/useInventory", () => ({
   __esModule: true,
   default: () => ({
     inventory: [
-      { id: "1", name: "Item 1", quantity: 10 },
-      { id: "2", name: "Item 2", quantity: 20 },
+      { id: "1", name: "Orange", quantity: 10 },
+      { id: "2", name: "Lemon", quantity: 20 },
     ],
     fetchInventory: jest.fn(),
     handleRemoveItem: jest.fn(),
@@ -40,8 +40,8 @@ describe("InventoryList.vue", () => {
     await nextTick(); // Ensure the component has re-rendered after fetching inventory
     const itemElements = wrapper.findAll(".list-group-item");
     expect(itemElements).toHaveLength(2); // mocking 2 inventory items
-    expect(itemElements[0].text()).toContain("Item 1");
-    expect(itemElements[1].text()).toContain("Item 2");
+    expect(itemElements[0].text()).toContain("Orange");
+    expect(itemElements[1].text()).toContain("Lemon");
   });
   it("navigates to the add form when 'Add New' button is clicked", async () => {
     const routerPushSpy = jest.spyOn(router, "push");

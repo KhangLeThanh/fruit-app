@@ -1,6 +1,12 @@
 <template>
   <div class="container">
-    <button @click="goBack" class="btn btn-secondary mb-3">Back</button>
+    <button
+      @click="goBack"
+      class="btn btn-secondary mb-3"
+      data-testId="backButton"
+    >
+      Back
+    </button>
 
     <h1 class="text-center mb-4">
       {{ isEditMode ? "Edit Item" : "Add Item" }}
@@ -86,7 +92,9 @@ export default defineComponent({
       if (routeId && typeof routeId === "string") {
         isEditMode.value = true;
         inventoryId.value = routeId;
+
         const item = await fetchOneInventory(routeId);
+
         if (item) {
           name.value = item.name;
           quantity.value = item.quantity;

@@ -1,12 +1,12 @@
 import { ref } from "vue";
-import { InventoryItem } from "../services/types";
+import { InventoryItem } from "@/services/types";
 import {
   getInventory,
   addItem,
   removeItem,
   updateItem,
   getOneInventory,
-} from "../services/inventoryService";
+} from "@/services/inventoryService";
 
 export default function useInventory() {
   const inventory = ref<InventoryItem[]>([]);
