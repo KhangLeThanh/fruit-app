@@ -50,7 +50,11 @@
         </div>
       </div>
 
-      <button type="submit" class="btn btn-primary w-100">
+      <button
+        type="submit"
+        class="btn btn-primary w-100"
+        :disabled="isUnchanged"
+      >
         {{ isEditMode ? "Update" : "Add" }}
       </button>
     </form>
@@ -58,7 +62,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from "vue";
+import { defineComponent, ref, onMounted, computed } from "vue";
 import { useRouter } from "vue-router";
 import { validationSchema } from "@/services/validationSchema";
 import { InventoryFormErrors } from "@/services/types";
@@ -81,6 +85,8 @@ export default defineComponent({
     const inventoryId = ref<string>("");
     const name = ref<string>("");
     const quantity = ref<number>(0);
+    const originalName = ref<string>("");
+    const originalQuantity = ref<number>(0);
     const errors = ref<InventoryFormErrors>({
       name: "",
       quantity: "",
@@ -98,6 +104,8 @@ export default defineComponent({
         if (item) {
           name.value = item.name;
           quantity.value = item.quantity;
+          originalName.value = item.name;
+          originalQuantity.value = item.quantity;
         } else {
           console.error("Item not found!");
         }
@@ -107,6 +115,15 @@ export default defineComponent({
     const goBack = () => {
       router.push("/");
     };
+
+    // Checking whether value of name and quantity changes in edit mode or not
+    const isUnchanged = computed(() => {
+      if (!isEditMode.value) return false; // Always enable in Add mode
+      return (
+        name.value === originalName.value &&
+        quantity.value === originalQuantity.value
+      );
+    });
 
     const validateForm = async () => {
       try {
@@ -147,6 +164,7 @@ export default defineComponent({
       handleSubmit,
       errors,
       goBack,
+      isUnchanged,
     };
   },
 });

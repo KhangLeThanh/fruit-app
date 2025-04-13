@@ -1,5 +1,21 @@
 <template>
-  <router-view />
+  <Suspense>
+    <template #default>
+      <router-view />
+    </template>
+    <template #fallback>
+      <div
+        class="d-flex justify-content-center align-items-center"
+        style="height: 100vh"
+      >
+        <div
+          class="spinner-border text-primary"
+          role="status"
+          aria-hidden="true"
+        ></div>
+      </div>
+    </template>
+  </Suspense>
 </template>
 
 <script lang="ts">
