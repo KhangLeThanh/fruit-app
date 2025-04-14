@@ -1,5 +1,8 @@
 <template>
   <div class="container">
+    <div v-if="errorMessage" class="alert alert-danger">
+      {{ errorMessage }}
+    </div>
     <button
       @click="goBack"
       class="btn btn-secondary mb-3"
@@ -49,7 +52,9 @@
           {{ errors.quantity }}
         </div>
       </div>
-
+      <div v-if="submitError" class="alert alert-danger text-center">
+        {{ submitError }}
+      </div>
       <button
         type="submit"
         class="btn btn-primary w-100"
@@ -81,6 +86,7 @@ export default defineComponent({
   setup(props) {
     const router = useRouter();
     const { handleAddItem, handleEditItem, fetchOneInventory } = useInventory();
+    const errorMessage = ref<string | null>(null);
 
     const isEditMode = ref<boolean>(false);
     const inventoryId = ref<string>("");
@@ -92,23 +98,27 @@ export default defineComponent({
       name: "",
       quantity: "",
     });
-
+    const submitError = ref<string>("");
     onMounted(async () => {
       const routeId = props.id;
 
       if (routeId && typeof routeId === "string") {
         isEditMode.value = true;
         inventoryId.value = routeId;
+        try {
+          const item = await fetchOneInventory(routeId);
 
-        const item = await fetchOneInventory(routeId);
-
-        if (item) {
-          name.value = item.name;
-          quantity.value = item.quantity;
-          originalName.value = item.name;
-          originalQuantity.value = item.quantity;
-        } else {
-          console.error("Item not found!");
+          if (item) {
+            name.value = item.name;
+            quantity.value = item.quantity;
+            originalName.value = item.name;
+            originalQuantity.value = item.quantity;
+          } else {
+            console.error("Item not found!");
+          }
+        } catch {
+          errorMessage.value =
+            "Unable to load an inventory data. Please try again later.";
         }
       }
     });
@@ -150,12 +160,16 @@ export default defineComponent({
     const handleSubmit = async () => {
       const isValid = await validateForm();
       if (!isValid) return;
-      if (isEditMode.value) {
-        await handleEditItem(inventoryId.value, quantity.value, name.value);
-      } else {
-        await handleAddItem(name.value);
+      try {
+        if (isEditMode.value) {
+          await handleEditItem(inventoryId.value, quantity.value, name.value);
+        } else {
+          await handleAddItem(name.value);
+        }
+        router.push("/");
+      } catch {
+        submitError.value = "Unabled to save data";
       }
-      router.push("/");
     };
 
     return {
@@ -166,6 +180,8 @@ export default defineComponent({
       errors,
       goBack,
       isUnchanged,
+      submitError,
+      errorMessage,
     };
   },
 });

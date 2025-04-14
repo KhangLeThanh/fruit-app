@@ -16,8 +16,8 @@
         Add New
       </button>
     </div>
-
-    <ul class="list-group">
+    <h5 v-if="inventory && inventory.length === 0">No Inventory Found</h5>
+    <ul class="list-group" v-if="inventory">
       <li
         v-for="item in inventory"
         :key="item.id"
@@ -78,7 +78,7 @@ export default defineComponent({
     onMounted(async () => {
       try {
         await fetchInventory();
-      } catch (error) {
+      } catch {
         errorMessage.value =
           "Unable to load inventory. Please try again later.";
       }

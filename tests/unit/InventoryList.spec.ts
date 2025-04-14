@@ -5,15 +5,20 @@ import { createRouter, createMemoryHistory } from "vue-router";
 import { nextTick } from "vue";
 
 // Mocking useInventory composable
+const mockFetchInventory = jest.fn();
+const mockHandleRemoveItem = jest.fn();
+
+// Default inventory mock
+let mockInventory = [
+  { id: "1", name: "Orange", quantity: 10 },
+  { id: "2", name: "Lemon", quantity: 20 },
+];
 jest.mock("@/composables/useInventory", () => ({
   __esModule: true,
   default: () => ({
-    inventory: [
-      { id: "1", name: "Orange", quantity: 10 },
-      { id: "2", name: "Lemon", quantity: 20 },
-    ],
-    fetchInventory: jest.fn(),
-    handleRemoveItem: jest.fn(),
+    inventory: mockInventory,
+    fetchInventory: mockFetchInventory,
+    handleRemoveItem: mockHandleRemoveItem,
   }),
 }));
 
@@ -28,6 +33,8 @@ const router = createRouter({
 describe("InventoryList.vue", () => {
   let wrapper: VueWrapper;
   beforeEach(async () => {
+    jest.clearAllMocks(); // Clear previous mock calls
+
     router.push("/form");
     await router.isReady();
     wrapper = mount(InventoryList, {
@@ -42,6 +49,14 @@ describe("InventoryList.vue", () => {
     expect(itemElements).toHaveLength(2); // mocking 2 inventory items
     expect(itemElements[0].text()).toContain("Orange");
     expect(itemElements[1].text()).toContain("Lemon");
+  });
+  it("renders empty inventory items ", async () => {
+    mockInventory = []; // override inventory for this test
+    wrapper = mount(InventoryList, {
+      global: { plugins: [router] },
+    });
+    await nextTick();
+    expect(wrapper.text()).toContain("No Inventory Found");
   });
   it("navigates to the add form when 'Add New' button is clicked", async () => {
     const routerPushSpy = jest.spyOn(router, "push");
