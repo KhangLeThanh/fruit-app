@@ -1,6 +1,12 @@
 <template>
   <div class="container">
-    <div class="d-flex justify-content-between align-items-center mb-3">
+    <div v-if="errorMessage" class="alert alert-danger">
+      {{ errorMessage }}
+    </div>
+    <div
+      v-if="!errorMessage"
+      class="d-flex justify-content-between align-items-center mb-3"
+    >
       <h1 class="mb-0">Inventory</h1>
       <button
         class="btn btn-primary"
@@ -66,10 +72,16 @@ export default defineComponent({
     const { inventory, fetchInventory, handleRemoveItem } = useInventory();
     const router = useRouter();
     const isDialog = ref<boolean>(false);
+    const errorMessage = ref<string | null>(null);
     const itemIdToRemove = ref<string | null>(null);
 
-    onMounted(() => {
-      fetchInventory();
+    onMounted(async () => {
+      try {
+        await fetchInventory();
+      } catch (error) {
+        errorMessage.value =
+          "Unable to load inventory. Please try again later.";
+      }
     });
 
     const goToAddForm = () => {
@@ -100,6 +112,7 @@ export default defineComponent({
       goToAddForm,
       goToEditForm,
       isDialog,
+      errorMessage,
       removeItem,
       showDeleteDialog,
       onClose,

@@ -3,8 +3,16 @@ import { InventoryItem } from "./types";
 const API_URL = "/api/inventory";
 
 export const getInventory = async (): Promise<InventoryItem[]> => {
-  const response = await fetch(API_URL);
-  return response.json();
+  try {
+    const response = await fetch(API_URL);
+    if (!response.ok) {
+      throw new Error("Failed to fetch inventory data");
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching inventory:", error);
+    throw error;
+  }
 };
 
 export const addItem = async (name: string): Promise<InventoryItem> => {
