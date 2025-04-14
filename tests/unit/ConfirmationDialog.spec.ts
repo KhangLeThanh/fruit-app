@@ -10,7 +10,7 @@ describe("ConfirmationDialog.vue", () => {
         isVisible: true,
         message: "Are you sure you want to delete this item?",
       },
-      emit: ["confirm", "cancel"], // You can mock these events too
+      emit: ["confirm", "cancel"],
     });
   });
   it("renders the modal when internalOpen is true", async () => {
@@ -28,7 +28,7 @@ describe("ConfirmationDialog.vue", () => {
   });
 
   it('emits "confirm" event when the delete button is clicked', async () => {
-    await wrapper.find(".btn-danger").trigger("click"); // Trigger the delete button click
+    await wrapper.find('[data-testid="confirmButton"]').trigger("click"); // Trigger the confirm button click
     // Expect the "confirm" event to be emitted
     const emittedConfirm = wrapper.emitted("confirm");
     expect(emittedConfirm).toBeTruthy();
@@ -36,7 +36,7 @@ describe("ConfirmationDialog.vue", () => {
   });
 
   it('emits "cancel" event when the cancel button is clicked', async () => {
-    await wrapper.find(".btn-primary").trigger("click"); // Trigger the cancel button click
+    await wrapper.find('[data-testid="cancelButton"]').trigger("click"); // Trigger the cancel button click
     // Expect the "cancel" event to be emitted
     const emittedCancel = wrapper.emitted("cancel");
     expect(emittedCancel).toBeTruthy();

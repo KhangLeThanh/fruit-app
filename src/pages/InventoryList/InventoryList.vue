@@ -2,7 +2,13 @@
   <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h1 class="mb-0">Inventory</h1>
-      <button class="btn btn-primary" @click="goToAddForm">Add New</button>
+      <button
+        class="btn btn-primary"
+        @click="goToAddForm"
+        data-testId="addButton"
+      >
+        Add New
+      </button>
     </div>
 
     <ul class="list-group">
@@ -16,11 +22,16 @@
           <strong>{{ item.quantity }}</strong></span
         >
         <div>
-          <button class="btn btn-warning btn-sm" @click="goToEditForm(item.id)">
+          <button
+            class="btn btn-warning btn-sm"
+            data-testId="editButton"
+            @click="goToEditForm(item.id)"
+          >
             Edit
           </button>
           <button
             class="btn btn-danger btn-sm ms-2"
+            data-testId="removeButton"
             @click="showDeleteDialog(item.id)"
           >
             Remove

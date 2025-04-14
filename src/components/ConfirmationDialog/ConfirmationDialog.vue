@@ -1,13 +1,23 @@
 <template>
-  <div v-if="internalOpen" class="modal-overlay">
+  <div v-if="internalOpen" class="modal-overlay" data-testId="modal">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <p>{{ message }}</p>
         <div class="modal-actions">
-          <button @click="onConfirm" class="btn btn-danger confirm-button">
+          <button
+            @click="onConfirm"
+            data-testId="confirmButton"
+            class="btn btn-danger confirm-button"
+          >
             Delete
           </button>
-          <button @click="onCancel" class="btn btn-primary">Cancel</button>
+          <button
+            @click="onCancel"
+            class="btn btn-primary"
+            data-testId="cancelButton"
+          >
+            Cancel
+          </button>
         </div>
       </div>
     </div>

@@ -45,18 +45,18 @@ describe("InventoryList.vue", () => {
   });
   it("navigates to the add form when 'Add New' button is clicked", async () => {
     const routerPushSpy = jest.spyOn(router, "push");
-    const addButton = wrapper.find(".btn-primary");
+    const addButton = wrapper.find('[data-testid="addButton"]');
     await addButton.trigger("click");
     expect(routerPushSpy).toHaveBeenCalledWith("/form");
   });
   it("navigates to the edit form when first 'Edit' button is clicked", async () => {
     const routerPushSpy = jest.spyOn(router, "push");
-    const editButton = wrapper.findAll(".btn-warning")[0];
+    const editButton = wrapper.findAll('[data-testid="editBUtton"]')[0];
     await editButton.trigger("click");
     expect(routerPushSpy).toHaveBeenCalledWith("/form/1");
   });
   it("shows ConfirmationDialog when first 'Remove' button is clicked", async () => {
-    const removeButton = wrapper.findAll(".btn-danger")[0];
+    const removeButton = wrapper.findAll('[data-testid="removeButton"]')[0];
     await removeButton.trigger("click");
     expect(wrapper.findComponent(ConfirmationDialog).isVisible()).toBe(true);
   });
