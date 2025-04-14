@@ -1,9 +1,9 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 
 const InventoryList = () => import("@/pages/InventoryList/InventoryList.vue");
 const InventoryForm = () => import("@/pages/InventoryForm/InventoryForm.vue");
 
-const routes = [
+const routes: RouteRecordRaw[] = [
   { path: "/", name: "InventoryList", component: InventoryList },
   { path: "/form", name: "AddItem", component: InventoryForm },
   {

@@ -88,7 +88,6 @@ export default defineComponent({
     const removeItem = async () => {
       if (itemIdToRemove.value !== null) {
         await handleRemoveItem(itemIdToRemove.value);
-        isDialog.value = false; // Close modal after removing item
       }
     };
 
@@ -98,7 +97,6 @@ export default defineComponent({
 
     return {
       inventory,
-      handleRemoveItem,
       goToAddForm,
       goToEditForm,
       isDialog,

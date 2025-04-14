@@ -23,13 +23,7 @@ export default function useInventory() {
   };
   const handleAddItem = async (itemName: string) => {
     if (!itemName.trim()) return;
-
-    // Add item via API
     const newItem = await addItem(itemName);
-
-    // Fetch updated inventory
-    await fetchInventory();
-
     return newItem;
   };
   const handleRemoveItem = async (id: string) => {
@@ -38,7 +32,6 @@ export default function useInventory() {
   };
   const handleEditItem = async (id: string, quantity: number, name: string) => {
     await updateItem(id, quantity, name);
-    await fetchInventory();
   };
   return {
     inventory,

@@ -41,7 +41,7 @@ export default defineComponent({
   },
   emits: ["confirm", "cancel", "update:isVisible"],
   setup(props, { emit }) {
-    const internalOpen = ref(props.isVisible);
+    const internalOpen = ref<boolean>(false);
 
     // Sync the modal visibility between parent and child
     watch(
