@@ -1,5 +1,5 @@
 import { mount, VueWrapper } from "@vue/test-utils";
-import ConfirmationDialog from "@/components/ConfirmationDialog/ConfirmationDialog.vue"; // adjust the path as needed
+import ConfirmationDialog from "@/components/ConfirmationDialog/ConfirmationDialog.vue";
 
 describe("ConfirmationDialog.vue", () => {
   let wrapper: VueWrapper;

@@ -2,7 +2,7 @@ import { mount, VueWrapper } from "@vue/test-utils";
 import InventoryForm from "@/pages/InventoryForm/InventoryForm.vue";
 import { createRouter, createMemoryHistory } from "vue-router";
 import { nextTick } from "vue";
-import flushPromises from "flush-promises"; // <-- Import here
+import flushPromises from "flush-promises";
 
 // Mock composable
 const handleAddItem = jest.fn();
