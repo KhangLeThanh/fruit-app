@@ -58,7 +58,7 @@
       <button
         type="submit"
         class="btn btn-primary w-100"
-        :disabled="isEditMode && isUnchanged"
+        :disabled="isUnchanged"
         data-testid="submitButton"
       >
         {{ isEditMode ? "Update" : "Add" }}
