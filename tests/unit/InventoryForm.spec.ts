@@ -24,7 +24,7 @@ jest.mock("@/composables/useInventory", () => ({
   }),
 }));
 
-// 🧪 Mock data to simulate form state
+// Mock data to simulate form state
 let mockNameValue = "";
 let mockQuantityValue = 0;
 
