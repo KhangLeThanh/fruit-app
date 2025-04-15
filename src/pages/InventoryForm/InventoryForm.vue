@@ -3,6 +3,7 @@
     <div v-if="errorMessage" class="alert alert-danger">
       {{ errorMessage }}
     </div>
+
     <button
       @click="goBack"
       class="btn btn-secondary mb-3"
@@ -14,25 +15,22 @@
     <h1 class="text-center mb-4">
       {{ isEditMode ? "Edit Item" : "Add Item" }}
     </h1>
-    <form
-      @submit.prevent="handleSubmit"
-      class="mx-auto"
-      style="max-width: 500px"
-    >
+
+    <form @submit.prevent="submitForm" class="mx-auto" style="max-width: 500px">
       <div class="mb-3">
         <label for="name" class="form-label text-start d-block"
           >Inventory Name:</label
         >
         <input
           id="name"
-          v-model="name"
+          v-model="nameValue"
           type="text"
           class="form-control"
-          :class="{ 'is-invalid': errors.name }"
+          :class="{ 'is-invalid': nameError }"
           placeholder="Enter item name"
         />
-        <div v-if="errors.name" class="invalid-feedback text-start">
-          {{ errors.name }}
+        <div v-if="nameError" class="invalid-feedback text-start">
+          {{ nameError }}
         </div>
       </div>
 
@@ -43,22 +41,24 @@
         <input
           id="quantity"
           type="number"
-          v-model.number="quantity"
+          v-model.number="quantityValue"
           class="form-control"
-          :class="{ 'is-invalid': errors.quantity }"
+          :class="{ 'is-invalid': quantityError }"
           :disabled="!isEditMode"
         />
-        <div v-if="errors.quantity" class="invalid-feedback text-start">
-          {{ errors.quantity }}
+        <div v-if="quantityError" class="invalid-feedback text-start">
+          {{ quantityError }}
         </div>
       </div>
+
       <div v-if="submitError" class="alert alert-danger text-center">
         {{ submitError }}
       </div>
+
       <button
         type="submit"
         class="btn btn-primary w-100"
-        :disabled="isUnchanged"
+        :disabled="isEditMode && isUnchanged"
         data-testid="submitButton"
       >
         {{ isEditMode ? "Update" : "Add" }}
@@ -70,9 +70,9 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted, computed } from "vue";
 import { useRouter } from "vue-router";
+import { useForm, useField } from "vee-validate";
 import { validationSchema } from "@/services/validationSchema";
-import { InventoryFormErrors } from "@/services/types";
-import { ValidationError } from "yup";
+import { InventoryItem } from "@/services/types";
 import useInventory from "@/composables/useInventory";
 
 export default defineComponent({
@@ -87,101 +87,97 @@ export default defineComponent({
     const router = useRouter();
     const { handleAddItem, handleEditItem, fetchOneInventory } = useInventory();
     const errorMessage = ref<string | null>(null);
-
-    const isEditMode = ref<boolean>(false);
-    const inventoryId = ref<string>("");
-    const name = ref<string>("");
-    const quantity = ref<number>(0);
-    const originalName = ref<string>("");
-    const originalQuantity = ref<number>(0);
-    const errors = ref<InventoryFormErrors>({
-      name: "",
-      quantity: "",
-    });
     const submitError = ref<string>("");
+
+    const isEditMode = ref(false);
+    const inventoryId = ref("");
+
+    // VeeValidate form setup
+    const { handleSubmit, setValues, values } = useForm({
+      validationSchema,
+      initialValues: {
+        id: "",
+        name: "",
+        quantity: 0,
+      },
+    });
+
+    const { value: nameValue, errorMessage: nameError } =
+      useField<string>("name");
+    const { value: quantityValue, errorMessage: quantityError } =
+      useField<number>("quantity");
+
+    const originalValues = ref<InventoryItem>({
+      id: "",
+      name: "",
+      quantity: 0,
+    });
+
     onMounted(async () => {
       const routeId = props.id;
 
-      if (routeId && typeof routeId === "string") {
+      if (routeId) {
         isEditMode.value = true;
         inventoryId.value = routeId;
+
         try {
           const item = await fetchOneInventory(routeId);
-
           if (item) {
-            name.value = item.name;
-            quantity.value = item.quantity;
-            originalName.value = item.name;
-            originalQuantity.value = item.quantity;
+            setValues({
+              id: item.id,
+              name: item.name,
+              quantity: item.quantity,
+            });
+            originalValues.value = {
+              id: item.id,
+              name: item.name,
+              quantity: item.quantity,
+            };
           } else {
-            console.error("Item not found!");
+            errorMessage.value = "Item not found.";
           }
         } catch {
           errorMessage.value =
-            "Unable to load an inventory data. Please try again later.";
+            "Unable to load inventory data. Please try again later.";
         }
       }
     });
 
-    const goBack = () => {
-      router.push("/");
-    };
-
-    // Checking whether value of name and quantity changes in edit mode or not
     const isUnchanged = computed(() => {
-      if (!isEditMode.value) return false; // Always enable in Add mode
-      return (
-        name.value === originalName.value &&
-        quantity.value === originalQuantity.value
-      );
+      return JSON.stringify(values) === JSON.stringify(originalValues.value);
     });
 
-    const validateForm = async () => {
-      try {
-        errors.value = { name: "", quantity: "" };
-        await validationSchema.validate(
-          { name: name.value, quantity: quantity.value },
-          { abortEarly: false }
-        );
-        return true;
-      } catch (err) {
-        if (err instanceof ValidationError) {
-          err.inner.forEach((error) => {
-            errors.value[error.path as keyof typeof errors.value] =
-              error.message;
-          });
-        } else {
-          console.error("Unexpected error:", err);
-        }
-        return false;
-      }
-    };
+    const goBack = () => router.push("/");
 
-    const handleSubmit = async () => {
-      const isValid = await validateForm();
-      if (!isValid) return;
+    const onSubmit = async (formValues: { name: string; quantity: number }) => {
       try {
         if (isEditMode.value) {
-          await handleEditItem(inventoryId.value, quantity.value, name.value);
+          await handleEditItem(
+            inventoryId.value,
+            formValues.quantity,
+            formValues.name
+          );
         } else {
-          await handleAddItem(name.value);
+          await handleAddItem(formValues.name);
         }
         router.push("/");
-      } catch {
-        submitError.value = "Unabled to save data";
+      } catch (err) {
+        submitError.value = "Unable to save data.";
       }
     };
+    const submitForm = handleSubmit(onSubmit);
 
     return {
-      name,
-      quantity,
+      nameValue,
+      quantityValue,
+      nameError,
+      quantityError,
       isEditMode,
-      handleSubmit,
-      errors,
-      goBack,
       isUnchanged,
       submitError,
       errorMessage,
+      submitForm,
+      goBack,
     };
   },
 });
