@@ -1,25 +1,25 @@
 {
   "compilerOptions": {
-    "target": "esnext", // or "es2015"
+    "target": "esnext",
     "module": "esnext",
     "strict": true,
     "jsx": "preserve",
-    "importHelpers": true,
     "moduleResolution": "node",
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "useDefineForClassFields": true,
-    "sourceMap": true,
+    "sourceMap": true, // Keep this
+    "inlineSourceMap": false, // Set this to false
     "baseUrl": ".",
     "types": ["webpack-env", "jest", "cypress"],
     "paths": {
       "@/*": ["src/*"]
     },
     "lib": ["esnext", "dom", "dom.iterable", "scripthost"],
-    "experimentalDecorators": true, // Add this line
-    "emitDecoratorMetadata": true // Add this line
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
   "include": [
     "src/**/*.ts",
