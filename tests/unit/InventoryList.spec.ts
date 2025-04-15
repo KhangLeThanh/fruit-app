@@ -1,4 +1,5 @@
 import { mount, VueWrapper } from "@vue/test-utils";
+import { ref } from "vue";
 import InventoryList from "@/pages/InventoryList/InventoryList.vue";
 import ConfirmationDialog from "@/components/ConfirmationDialog/ConfirmationDialog.vue";
 import { createRouter, createMemoryHistory } from "vue-router";
@@ -9,10 +10,10 @@ const mockFetchInventory = jest.fn();
 const mockHandleRemoveItem = jest.fn();
 
 // Default inventory mock
-let mockInventory = [
+const mockInventory = ref([
   { id: "1", name: "Orange", quantity: 10 },
   { id: "2", name: "Lemon", quantity: 20 },
-];
+]);
 jest.mock("@/composables/useInventory", () => ({
   __esModule: true,
   default: () => ({
@@ -50,8 +51,19 @@ describe("InventoryList.vue", () => {
     expect(itemElements[0].text()).toContain("Orange");
     expect(itemElements[1].text()).toContain("Lemon");
   });
+  it("navigates to the edit form when first 'Edit' button is clicked", async () => {
+    const routerPushSpy = jest.spyOn(router, "push");
+    const editButton = wrapper.findAll('[data-testid="editButton"]')[0];
+    await editButton.trigger("click");
+    expect(routerPushSpy).toHaveBeenCalledWith("/form/1");
+  });
+  it("shows ConfirmationDialog when first 'Remove' button is clicked", async () => {
+    const removeButton = wrapper.findAll('[data-testid="removeButton"]')[0];
+    await removeButton.trigger("click");
+    expect(wrapper.findComponent(ConfirmationDialog).isVisible()).toBe(true);
+  });
   it("renders empty inventory items ", async () => {
-    mockInventory = []; // override inventory for this test
+    mockInventory.value = [];
     wrapper = mount(InventoryList, {
       global: { plugins: [router] },
     });
@@ -63,16 +75,5 @@ describe("InventoryList.vue", () => {
     const addButton = wrapper.find('[data-testid="addButton"]');
     await addButton.trigger("click");
     expect(routerPushSpy).toHaveBeenCalledWith("/form");
-  });
-  it("navigates to the edit form when first 'Edit' button is clicked", async () => {
-    const routerPushSpy = jest.spyOn(router, "push");
-    const editButton = wrapper.findAll('[data-testid="editBUtton"]')[0];
-    await editButton.trigger("click");
-    expect(routerPushSpy).toHaveBeenCalledWith("/form/1");
-  });
-  it("shows ConfirmationDialog when first 'Remove' button is clicked", async () => {
-    const removeButton = wrapper.findAll('[data-testid="removeButton"]')[0];
-    await removeButton.trigger("click");
-    expect(wrapper.findComponent(ConfirmationDialog).isVisible()).toBe(true);
   });
 });

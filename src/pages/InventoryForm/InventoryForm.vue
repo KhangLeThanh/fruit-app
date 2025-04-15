@@ -6,7 +6,7 @@
     <button
       @click="goBack"
       class="btn btn-secondary mb-3"
-      data-testId="backButton"
+      data-testid="backButton"
     >
       Back
     </button>
@@ -59,7 +59,7 @@
         type="submit"
         class="btn btn-primary w-100"
         :disabled="isUnchanged"
-        data-testId="submitButton"
+        data-testid="submitButton"
       >
         {{ isEditMode ? "Update" : "Add" }}
       </button>

@@ -1,12 +1,12 @@
 <template>
-  <div v-if="internalOpen" class="modal-overlay" data-testId="modal">
+  <div v-if="internalOpen" class="modal-overlay" data-testid="modal">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <p>{{ message }}</p>
         <div class="modal-actions">
           <button
             @click="onConfirm"
-            data-testId="confirmButton"
+            data-testid="confirmButton"
             class="btn btn-danger confirm-button"
           >
             Delete
@@ -14,7 +14,7 @@
           <button
             @click="onCancel"
             class="btn btn-primary"
-            data-testId="cancelButton"
+            data-testid="cancelButton"
           >
             Cancel
           </button>
@@ -48,7 +48,8 @@ export default defineComponent({
       () => props.isVisible,
       (newVal) => {
         internalOpen.value = newVal;
-      }
+      },
+      { immediate: true }
     );
 
     // Emit the updated visibility to the parent

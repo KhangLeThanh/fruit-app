@@ -11,7 +11,7 @@
       <button
         class="btn btn-primary"
         @click="goToAddForm"
-        data-testId="addButton"
+        data-testid="addButton"
       >
         Add New
       </button>
@@ -30,14 +30,14 @@
         <div>
           <button
             class="btn btn-warning btn-sm"
-            data-testId="editButton"
+            data-testid="editButton"
             @click="goToEditForm(item.id)"
           >
             Edit
           </button>
           <button
             class="btn btn-danger btn-sm ms-2"
-            data-testId="removeButton"
+            data-testid="removeButton"
             @click="showDeleteDialog(item.id)"
           >
             Remove
