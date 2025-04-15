@@ -89,8 +89,8 @@ export default defineComponent({
     const errorMessage = ref<string | null>(null);
     const submitError = ref<string>("");
 
-    const isEditMode = ref(false);
-    const inventoryId = ref("");
+    const isEditMode = ref<boolean>(false);
+    const inventoryId = ref<string>("");
 
     // VeeValidate form setup
     const { handleSubmit, setValues, values } = useForm({
