@@ -10,7 +10,6 @@ export const getInventory = async (): Promise<InventoryItem[]> => {
     }
     return await response.json();
   } catch (error) {
-    console.error("Error fetching inventory:", error);
     throw error;
   }
 };
@@ -28,7 +27,6 @@ export const addItem = async (name: string): Promise<InventoryItem> => {
     }
     return await response.json();
   } catch (error) {
-    console.error("Error adding a new inventory:", error);
     throw error;
   }
 };
@@ -41,7 +39,6 @@ export const getOneInventory = async (id: string): Promise<InventoryItem> => {
     }
     return await response.json();
   } catch (error) {
-    console.error(`Error fetching item with id ${id}:`, error);
     throw error;
   }
 };
@@ -53,7 +50,6 @@ export const removeItem = async (id: string): Promise<void> => {
       throw new Error("Failed to delete an inventory ");
     }
   } catch (error) {
-    console.error(`Error deleting item with id ${id}:`, error);
     throw error;
   }
 };
@@ -76,7 +72,6 @@ export const updateItem = async (
     }
     return await response.json();
   } catch (error) {
-    console.error(`Error updating item with id ${id}:`, error);
     throw error;
   }
 };
