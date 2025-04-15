@@ -2,7 +2,6 @@ import { mount, VueWrapper } from "@vue/test-utils";
 import InventoryForm from "@/pages/InventoryForm/InventoryForm.vue";
 import { createRouter, createMemoryHistory } from "vue-router";
 import { nextTick } from "vue";
-import flushPromises from "flush-promises";
 import { ref } from "vue";
 
 type FormValues = {
@@ -139,7 +138,6 @@ describe("InventoryForm.vue", () => {
     });
 
     // Wait for the next DOM update after the component has mounted
-    await flushPromises(); // Wait for fetchOneInventory and all async logic to finish
     await nextTick();
 
     expect(wrapper.text()).toContain("Edit Item");
