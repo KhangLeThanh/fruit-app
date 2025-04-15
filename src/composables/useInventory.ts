@@ -22,7 +22,6 @@ export default function useInventory() {
     return null;
   };
   const handleAddItem = async (itemName: string) => {
-    if (!itemName.trim()) return;
     const newItem = await addItem(itemName);
     return newItem;
   };

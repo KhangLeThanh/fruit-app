@@ -150,6 +150,12 @@ export default defineComponent({
     const goBack = () => router.push("/");
 
     const onSubmit = async (formValues: { name: string; quantity: number }) => {
+      const trimmedName = formValues.name.trim();
+
+      if (!trimmedName) {
+        submitError.value = "Item name cannot be empty.";
+        return;
+      }
       try {
         if (isEditMode.value) {
           await handleEditItem(
