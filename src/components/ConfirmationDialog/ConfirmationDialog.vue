@@ -80,13 +80,13 @@ export default defineComponent({
 <style scoped>
 /* Style for overlay */
 .modal-overlay {
-  background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent overlay */
+  background-color: rgba(0, 0, 0, 0.6);
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 1000; /* Ensure overlay covers everything */
+  z-index: 1000;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -98,7 +98,7 @@ export default defineComponent({
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; /* Full viewport height */
+  height: 100vh;
 }
 
 /* Styling for modal content */

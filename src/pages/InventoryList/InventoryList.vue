@@ -61,7 +61,7 @@
 import { defineComponent, ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import useInventory from "@/composables/useInventory";
-import ConfirmationDialog from "@/components/ConfirmationDialog/ConfirmationDialog.vue"; // Import your ConfirmationDialog
+import ConfirmationDialog from "@/components/ConfirmationDialog/ConfirmationDialog.vue";
 
 export default defineComponent({
   name: "InventoryList",
