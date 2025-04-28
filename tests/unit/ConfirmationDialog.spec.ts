@@ -46,9 +46,6 @@ describe("ConfirmationDialog.vue", () => {
   it('emits "update:isVisible" when internalOpen changes', async () => {
     // Update internalOpen state, simulating closing the modal
     await wrapper.setProps({ isVisible: false });
-    // Ensure that the "update:isVisible" event is emitted
-    expect(wrapper.emitted("update:isVisible")).toBeTruthy();
-
     // Type assertion to handle the possibility of undefined
     const emittedValues = wrapper.emitted("update:isVisible");
     expect(emittedValues).toBeTruthy(); // Ensures the array is not undefined
