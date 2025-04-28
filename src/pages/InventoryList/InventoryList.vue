@@ -48,8 +48,7 @@
 
     <!-- Confirmation Dialog Modal -->
     <ConfirmationDialog
-      :isVisible="isDialog"
-      @update:isVisible="isDialog = $event"
+      v-model:isVisible="isDialog"
       :message="'Are you sure you want to delete?'"
       @confirm="removeItem"
       @cancel="onClose"

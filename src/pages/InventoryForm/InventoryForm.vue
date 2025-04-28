@@ -3,14 +3,12 @@
     <div v-if="errorMessage" class="alert alert-danger">
       {{ errorMessage }}
     </div>
-
-    <button
-      @click="goBack"
-      class="btn btn-secondary mb-3"
-      data-testid="backButton"
-    >
-      Back
-    </button>
+    <ButtonComponent
+      :class="'btn-secondary'"
+      :dataId="'backButton'"
+      @parentClick="goBack"
+      :text="'Back'"
+    />
 
     <h1 class="text-center mb-4">
       {{ isEditMode ? "Edit Item" : "Add Item" }}
@@ -21,14 +19,8 @@
         <label for="name" class="form-label text-start d-block"
           >Inventory Name:</label
         >
-        <input
-          id="name"
-          v-model="nameValue"
-          type="text"
-          class="form-control"
-          :class="{ 'is-invalid': nameError }"
-          placeholder="Enter item name"
-        />
+        <InputComponent v-model="nameValue" :errorInput="nameError" />
+
         <div v-if="nameError" class="invalid-feedback text-start">
           {{ nameError }}
         </div>
@@ -38,14 +30,13 @@
         <label for="quantity" class="form-label text-start d-block"
           >Quantity:</label
         >
-        <input
-          id="quantity"
+        <InputComponent
+          v-model.quantity="quantityValue"
+          :errorInput="quantityError"
           type="number"
-          v-model.number="quantityValue"
-          class="form-control"
-          :class="{ 'is-invalid': quantityError }"
-          :disabled="!isEditMode"
+          :isDisabled="!isEditMode"
         />
+
         <div v-if="quantityError" class="invalid-feedback text-start">
           {{ quantityError }}
         </div>
@@ -54,15 +45,13 @@
       <div v-if="submitError" class="alert alert-danger text-center">
         {{ submitError }}
       </div>
-
-      <button
-        type="submit"
-        class="btn btn-primary w-100"
-        :disabled="isUnchanged"
-        data-testid="submitButton"
-      >
-        {{ isEditMode ? "Update" : "Add" }}
-      </button>
+      <ButtonComponent
+        :class="'btn-primary w-100'"
+        :dataId="'submitButton'"
+        @parentClick="goBack"
+        :text="isEditMode ? 'Update' : 'Add'"
+        :isDisabled="isUnchanged"
+      />
     </form>
   </div>
 </template>
@@ -74,9 +63,12 @@ import { useForm, useField } from "vee-validate";
 import { validationSchema } from "@/services/validationSchema";
 import { InventoryItem } from "@/services/types";
 import useInventory from "@/composables/useInventory";
+import InputComponent from "@/components/InputComponent/InputComponent.vue";
+import ButtonComponent from "@/components/ButtonComponent/ButtonComponent.vue";
 
 export default defineComponent({
   name: "InventoryForm",
+  components: { InputComponent, ButtonComponent },
   props: {
     id: {
       type: String,
