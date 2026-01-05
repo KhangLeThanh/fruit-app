@@ -1,7 +1,7 @@
 # Inventory Management Application
 
 ## Overview
-Tech stacks are:  Vue3, Typescript, Material UI
+Tech stacks are:  Vue3, Typescript, Material UI. 
 This is a simple inventory management web application that allows users to:
 
 - View a list of inventory items
